@@ -1,29 +1,30 @@
 // © Ols87
 //@version=6
 strategy("BTC - 1D", overlay = true, initial_capital = 1000, currency = 'USD', default_qty_type = strategy.percent_of_equity, default_qty_value = 100, margin_long = 0, margin_short =  0)
+
 // TREND
+dist = ta.highest(high, 60) -  ta.lowest(low, 60)
+mid = ta.highest(high, 60) - (dist / 2)
+mid_ma = ta.ema(mid, 60)
 
-dist = ta.highest(high, 80) -  ta.lowest(low, 80)
-mid = ta.highest(high, 80) - (dist / 2)
-mid_ma = ta.ema(mid, 80)
+bull_trend = close > mid_ma and close[1] < mid_ma
+bear_trend = close < mid_ma and close[1] > mid_ma
 
-bull_trend = close > mid_ma
-bear_trend = close < mid_ma
+// DYNAMIC COLOR
+// Checks if the current MA is higher or lower than the previous bar's MA
+ma_color = close > mid_ma ? color.green : color.red
 
-bull_trigger = bull_trend  and close[1] > mid_ma and close[2] < mid_ma
-bear_trigger = bear_trend  and close[1] < mid_ma and close[2] > mid_ma
+// PLOTS
+plot(mid_ma, color=ma_color, linewidth=2, title="Mid MA")
 
-plot(mid_ma, color=color.white)
+plot(ta.sma(close, 1400), color=color.white, linewidth=2, title="Mid MA")
 
-if bull_trend
-    strategy.entry("L", strategy.long)
-    strategy.close("S")
-    
-if bear_trigger
-    strategy.entry("S", strategy.short)
-    strategy.close("L")
-
-exitCondition = strategy.position_avg_price * (1 - 0.10)
-
-if strategy.position_size < 0
-    strategy.exit("S", limit=exitCondition)
+// STRATEGY EXECUTION
+start_date = timestamp("2020-09-21T00:00:00")
+if(time > start_date)
+    if bull_trend
+        strategy.entry("L", strategy.long)
+        
+    // Closes trade if a bear trigger occurs OR if price reaches 50%+ above mid_ma
+    if bear_trend
+        strategy.close("L")
