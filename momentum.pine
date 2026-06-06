@@ -89,7 +89,7 @@ fill(volatility_upper, volatility_mid, color.new(color.white, 80))
 fill(volatility_lower, volatility_mid, color.new(color.white, 80))
 // MOMENTUM
 float momentum = (((stoch + rsi + waves + di + pmarp + vfi) / 6) * 1.1) -5
-series float momentum_ma = ta.ema((momentum * 1.1) - 5 , 5)
+series float momentum_ma = ta.sma((momentum * 1.1) - 5 , 30)
 
 plot(momentum, color = color.white)
 plot(momentum_ma, color = color.yellow)
