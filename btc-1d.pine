@@ -7,12 +7,12 @@ dist = ta.highest(high, 60) -  ta.lowest(low, 60)
 mid = ta.highest(high, 60) - (dist / 2)
 mid_ma = ta.ema(mid, 60)
 
-bull_trend = close > mid_ma and close[1] < mid_ma
-bear_trend = close < mid_ma and close[1] > mid_ma
+bull_trend = close > mid_ma and close[1] > mid_ma and close[2] < mid_ma
+bear_trend = close < mid_ma and close[1] > mid_ma and close[2] > mid_ma
 
 // DYNAMIC COLOR
 // Checks if the current MA is higher or lower than the previous bar's MA
-ma_color = close > mid_ma ? color.green : color.red
+ma_color = bull_trend ? color.green : color.red
 
 // PLOTS
 plot(mid_ma, color=ma_color, linewidth=2, title="Mid MA")
@@ -20,7 +20,7 @@ plot(mid_ma, color=ma_color, linewidth=2, title="Mid MA")
 plot(ta.sma(close, 1400), color=color.white, linewidth=2, title="Mid MA")
 
 // STRATEGY EXECUTION
-start_date = timestamp("2020-09-21T00:00:00")
+start_date = timestamp("2020-01-01T00:00:00")
 if(time > start_date)
     if bull_trend
         strategy.entry("L", strategy.long)
