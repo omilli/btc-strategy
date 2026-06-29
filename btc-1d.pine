@@ -16,6 +16,10 @@ ma_color = close > mid_ma ? color.green : color.red
 
 // PLOTS
 
+plot(mid_ma, color=ma_color, linewidth=2, title="Mid MA")
+
+plot(ta.sma(close, 1400), color=color.white, linewidth=2, title="Mid MA")
+
 // STRATEGY EXECUTION
 start_date = timestamp("2020-01-01T00:00:00")
 if(time > start_date)
@@ -25,7 +29,3 @@ if(time > start_date)
     // Closes trade if a bear trigger occurs OR if price reaches 50%+ above mid_ma
     if bear_trend
         strategy.close("L")
-
-plot(mid_ma, color=ma_color, linewidth=2, title="Mid MA")
-
-plot(ta.sma(close, 1400), color=color.white, linewidth=2, title="Mid MA")
