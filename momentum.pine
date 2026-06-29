@@ -75,7 +75,7 @@ f_bbwp (_price, _bbwLen, _bbwpLen) =>
         _bbwSum
     _return = bar_index >= _bbwLen ? (_bbwSum / _len) * 100 : na
     _return
-bbwp = f_bbwp (close, 22, 233)
+bbwp = f_bbwp (close, 154, 233)
 bbwp_ma = ta.ema (bbwp, 5)
 // VOLATILITY
 float volatility = (bbwp / 2) * 2
